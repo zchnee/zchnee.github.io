@@ -1,0 +1,624 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>数据库笔记 | Hexo</title><meta name="author" content="John Doe"><meta name="copyright" content="John Doe"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="6.17 检验一下count对空值的处理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库笔记">
+<meta property="og:url" content="http://example.com/2023/07/20/database/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="6.17 检验一下count对空值的处理">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-07-20T07:02:41.868Z">
+<meta property="article:modified_time" content="2023-07-20T07:12:20.582Z">
+<meta property="article:author" content="John Doe">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://example.com/2023/07/20/database/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlighjs","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":false},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  source: {
+    justifiedGallery: {
+      js: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.js',
+      css: 'https://cdn.jsdelivr.net/npm/flickr-justified-gallery/dist/fjGallery.min.css'
+    }
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '数据库笔记',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-07-20 15:12:20'
+}</script><noscript><style type="text/css">
+  #nav {
+    opacity: 1
+  }
+  .justified-gallery img {
+    opacity: 1
+  }
+
+  #recent-posts time,
+  #post-meta time {
+    display: inline !important
+  }
+</style></noscript><script>(win=>{
+    win.saveToLocal = {
+      set: function setWithExpiry(key, value, ttl) {
+        if (ttl === 0) return
+        const now = new Date()
+        const expiryDay = ttl * 86400000
+        const item = {
+          value: value,
+          expiry: now.getTime() + expiryDay,
+        }
+        localStorage.setItem(key, JSON.stringify(item))
+      },
+
+      get: function getWithExpiry(key) {
+        const itemStr = localStorage.getItem(key)
+
+        if (!itemStr) {
+          return undefined
+        }
+        const item = JSON.parse(itemStr)
+        const now = new Date()
+
+        if (now.getTime() > item.expiry) {
+          localStorage.removeItem(key)
+          return undefined
+        }
+        return item.value
+      }
+    }
+  
+    win.getScript = url => new Promise((resolve, reject) => {
+      const script = document.createElement('script')
+      script.src = url
+      script.async = true
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    })
+  
+    win.getCSS = (url,id = false) => new Promise((resolve, reject) => {
+      const link = document.createElement('link')
+      link.rel = 'stylesheet'
+      link.href = url
+      if (id) link.id = id
+      link.onerror = reject
+      link.onload = link.onreadystatechange = function() {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        link.onload = link.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(link)
+    })
+  
+      win.activateDarkMode = function () {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = function () {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+          if (t === 'dark') activateDarkMode()
+          else if (t === 'light') activateLightMode()
+        
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+    const detectApple = () => {
+      if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+    })(window)</script><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><hr class="custom-hr"/></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="Hexo"><span class="site-name">Hexo</span></a></span><div id="menus"><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">数据库笔记</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-07-20T07:02:41.868Z" title="Created 2023-07-20 15:02:41">2023-07-20</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-07-20T07:12:20.582Z" title="Updated 2023-07-20 15:12:20">2023-07-20</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="数据库笔记"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post View:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h2 id="1-绪论"><a href="#1-绪论" class="headerlink" title="1 绪论"></a>1 绪论</h2><h3 id="1-1-1-2-开始"><a href="#1-1-1-2-开始" class="headerlink" title="1.1-1.2 开始"></a>1.1-1.2 开始</h3><p>数据库管理系统：DBMS<br>数据定义语言 DDL<br>数据控制语言 DML<br>使用文件存储数据库的劣处：</p>
+<ul>
+<li>数据冗余，不一致，数据访问困难，原子性问题（一些操作不能再分 割），数据孤立（数据在不同的文件里）并发访问异常，安全性问题，完整性问题（数据需要满足一些要求），安全性问题（有些数据不应该被用户访问）</li>
+</ul>
+<p>数据库系统存储数据优势：</p>
+<ul>
+<li>数据结构化</li>
+<li>数据的共享性高，冗余度低且易扩充</li>
+<li>数据独立性高 物理层和逻辑层，逻辑层和视图层分离</li>
+<li>数据由数据库管理系统统一管理和控制 解决原子性问题、并发、安全性问题、完整性问题</li>
+</ul>
+<h3 id="1-3数据抽象"><a href="#1-3数据抽象" class="headerlink" title="1.3数据抽象"></a>1.3数据抽象</h3><p>数据视图</p>
+<ul>
+<li><p>数据模型</p>
+<ul>
+<li>关系模型（sql查询）</li>
+<li>E-R模型（这次考试无关）</li>
+<li>etc</li>
+<li>层次分类：概念模型 逻辑模型（上面的模型都是这个层次） 物理~</li>
+</ul>
+</li>
+<li><p>数据抽象层次</p>
+<ul>
+<li>物理层 数据如何存储 描述底层的数据结构</li>
+<li>逻辑层 数据库里有什么数据，数据之间的关系 数据库管理员的层次 物理数据独立性：逻辑层的用户不需要了解物理层实现数据催储的细节</li>
+<li>视图层 数据库用户看到的层次</li>
+</ul>
+</li>
+<li><p>实例instance和模式schema之间的区别  </p>
+<ul>
+<li>物理模式  逻辑模式 在物理&#x2F;逻辑层描述数据库的设计</li>
+<li>实例： 某个特定时间数据库里信息的集合</li>
+</ul>
+</li>
+<li><p>E-R模型一些概念：</p>
+<ul>
+<li>实体、实体型、实体集：客观存在并可相互区别的事物&#x2F;对象 称为实体 实体集是同一类型实体集合 实体型：用实体名及其属性名集合来抽象和刻画的同类实体</li>
+<li>属性：实体所具有的某一特性称为属性；一个实体可以由若干个属性来刻画</li>
+<li>联系： 多个实体间的相互关联  </li>
+<li>码 ：唯一标识某个实体属性集</li>
+</ul>
+</li>
+<li><p>关系模型的一些概念：</p>
+<ul>
+<li>关系表 元组行 属性列</li>
+<li>各种码（第二章）</li>
+<li>域  一组具有相同数据类型的值的集合</li>
+</ul>
+</li>
+</ul>
+<p>关系的要求：属性的值是原子化的，不能再分？</p>
+<ul>
+<li>数据库语言<ul>
+<li>分类：DDL，DML 实现查填删改</li>
+<li>另一种分类： 纯粹的语言和商业化的语言</li>
+</ul>
+</li>
+</ul>
+<p>型和值的概念</p>
+<p>数据库设计 概念设计→逻辑设计→物理设计</p>
+<p>事务：事务是数据库应用中完成单一逻辑功能的操作集合</p>
+<p>数据库的结构：</p>
+<ol>
+<li>两层：用户和应用程序交互，应用程序直接连接数据库</li>
+<li>发展到三层：用户作为前端，和应用服务器互动，应用服务器（业务逻辑在这里而不是客户端）连接数据库，性能更高，更安全</li>
+</ol>
+<h2 id="2-关系模型介绍-关系代数查询"><a href="#2-关系模型介绍-关系代数查询" class="headerlink" title="2 关系模型介绍  关系代数查询"></a>2 关系模型介绍  关系代数查询</h2><h3 id="更多的概念"><a href="#更多的概念" class="headerlink" title="更多的概念"></a>更多的概念</h3><ul>
+<li><p>数据库模式和数据库实例： 模式：数据库数据的逻辑结构和特征描述 实例是数据库里数据的快照（？）</p>
+</li>
+<li><p>关系模式： 关系的描述</p>
+</li>
+<li><p>域 看上面 属性的域：属性允许取值的集合</p>
+</li>
+<li><p>笛卡尔积</p>
+</li>
+<li><p>分量 元组里的一个值</p>
+</li>
+<li><p>一个元组的所有属性必须唯一标识这个元组（不能有重复）</p>
+</li>
+<li><p>码</p>
+<ul>
+<li>超码：可以唯一标识一个元组的属性集合</li>
+<li>候选码：最小的超码</li>
+<li>主码： 被选定区分不同元组的候选码</li>
+<li>全码：候选码是所有属性<br>以上这些都被叫做码 可以唯一标识一个元组</li>
+</ul>
+</li>
+<li><p>关系分类：基本表，查询表（查询结果），视图表</p>
+</li>
+<li><p>空值：未知或不存在</p>
+</li>
+<li><p>外码约束： 被引用的一定是主码！！！</p>
+</li>
+<li><p>外码约束是引用&#x2F;参照完整性约束中的一种 这种完整性不要求主码</p>
+</li>
+<li><p>外码&#x2F;引用关系中的属性组可以为空！！！</p>
+</li>
+<li><p>模式图的画法： 主码加下划线 外码约束：外码指向被引用关系的主码</p>
+</li>
+</ul>
+<h3 id="关系代数"><a href="#关系代数" class="headerlink" title="关系代数"></a>关系代数</h3><ul>
+<li>关系代数是集合上的运算，会去掉重复的！（除非指明了是多重集）这很重要</li>
+<li>并交差 笛卡尔积</li>
+<li>选择 投影 连接  赋值（产生中间关系） 更名</li>
+<li>交并差是相容的！！ 注意注意</li>
+<li>除运算 看看 虽然大概不会考</li>
+<li>连接-悬浮元组:两个关系自然连接时因为在公共属性上没有相等元组而被舍弃的元组</li>
+</ul>
+<h2 id="3-SQL"><a href="#3-SQL" class="headerlink" title="3 SQL"></a>3 SQL</h2><ul>
+<li><p>建模式<br>create schema s_name  authorization user_name<br>删除模式：drop  schema xx restrict&#x2F;cascade<br>每个表都在一个模式里 （之前建的都在默认模式里）<br>(显示当前的搜索路径： SHOW search_path)</p>
+</li>
+<li><p>建基本表<br>create table instructor (<br>  ID varchar(5),<br>  name           varchar(20) not null,<br>  dept_name  varchar(20),<br>  salary           numeric(8,2),<br>  primary key (ID),<br>  foreign key (dept_name) references department)</p>
+</li>
+<li><p>列级约束：not null  primary key</p>
+</li>
+<li><p>（单个关系上的完整性约束： not null unique check）见第4章</p>
+</li>
+<li><p>修改表：</p>
+<ul>
+<li>插入： 单个值 insert into table_name(A1,……，An) values (x1,……，Xn)  基本表的属性可以不写，但是插入的数据对应顺序要一致<br>  从另一个表里插入 ： insert into table_name select xx，xx，xx，…… from another_table (where……)<br>  如果插入的值只给出了一部分属性，语句里可以指定别的属性的值，或者赋空值</li>
+<li>更新：update table_name set column_name xxxx(更新的方式) (where……)</li>
+<li>删除：delete from table_name (where……) delete 只能作用在单个关系上</li>
+</ul>
+</li>
+<li><p>修改表的模式  </p>
+<ul>
+<li>加一列、添加约束<br>alter table table_name add a d<br>alter table table name add constraint (c_name) xxx</li>
+<li>修改列<br>我不知道怎么改的</li>
+<li>删除列<br>alter table …… drop column_name</li>
+</ul>
+</li>
+<li><p>删除表<br>drop table t_name;</p>
+</li>
+<li><p>MySQL建立数据库：create database xxx</p>
+</li>
+<li><p>删除数据库：drop database xxx</p>
+</li>
+<li><p>查询基本表<br>基本结构：select …… from …… where……<br>可以加入算数表达式 select salary*1.1 from……</p>
+</li>
+<li><p>其他基本运算</p>
+<ul>
+<li>更名： old_name AS  new_name 或者省略AS<br>表和属性都可以更名</li>
+<li>字符串：<ul>
+<li>% 匹配任意字符串</li>
+<li>_ 匹配一个字符</li>
+<li>用 (not) like 匹配字符串</li>
+<li>匹配特殊字符：字符前面加\ 字符串后面用escape’&#39;</li>
+<li>大小写转化 upper(s) lower(s)</li>
+</ul>
+</li>
+<li>排列元组显示顺序：<ul>
+<li>order by col_name1 desc&#x2F;asc, col_name2 desc&#x2F;asc<br> 在元组在前一个属性上取值相同的时候按后一个列出的属性顺序排序</li>
+</ul>
+</li>
+<li>where 里可用的谓词 : and or between…… and ……  比较运算 &lt;&gt;是不等于</li>
+</ul>
+</li>
+<li><p>集合的运算<br>通用的是union(注意是相容的！) 会自动去掉重复项？</p>
+</li>
+<li><p>空值的问题</p>
+<ul>
+<li>检验空值 IS NULL 或者 IS　NOT NULL</li>
+<li>谓词中空值不等于任何值！</li>
+<li>where计算出false或者unknown都不会加入元组</li>
+<li>在对元组属性进行检测的时候认为null和null是相等的 即使用distinct时</li>
+</ul>
+</li>
+<li><p>集合成员资格</p>
+<ul>
+<li>in not in</li>
+</ul>
+</li>
+<li><p>聚集函数</p>
+<ul>
+<li><p>avg min max sum count</p>
+</li>
+<li><p>分组聚集： group by 出现在select里但是没被聚集的属性要出现在group by 里 否则出错</p>
+</li>
+<li><p>空值处理：忽略<br>count作用在空集上的结果是0，其余为null</p>
+</li>
+<li><p>聚集的可以是运算表达式，如两列乘积</p>
+</li>
+</ul>
+</li>
+<li><p>exists：是否存在元组</p>
+</li>
+<li><p>集合的比较： 比较运算符 +some&#x2F;all</p>
+</li>
+<li><p>子查询</p>
+<ul>
+<li>标量子查询：返回一个单值</li>
+<li>可以使用外层查询中的属性？</li>
+</ul>
+</li>
+<li><p>case 语句</p>
+<ul>
+<li>格式：<br>case  when — then —<br>when — then —<br>else</li>
+</ul>
+<p>end</p>
+<ul>
+<li>返回一个单值！！注意怎么用</li>
+</ul>
+</li>
+<li><p>查询语句的执行顺序：<br>先根据where选出符合要求的元组组合 （笛卡尔积然后去掉不需要的，或者可能会先选）<br>然后group by having 作用在每个group上<br>最后select 投影  </p>
+<ul>
+<li>笛卡尔积中一个集合是空集的话结果为空！！！</li>
+</ul>
+</li>
+<li><p>修饰词</p>
+<ul>
+<li>all（缺省）,distinct</li>
+<li>restrict, cascade</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-中级sql"><a href="#4-中级sql" class="headerlink" title="4 中级sql"></a>4 中级sql</h2><h3 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h3><ul>
+<li>4种<ul>
+<li>连接条件：on（类似于where）和using（需要属性名相同）<br>注意和where在外连接的时候有区别</li>
+<li>替换空值：coalesce()选择第一个不为空的值<br>     decode (待检测的值，可能等于的值1，替换的值1，可能等于的值2，替换的值2，……，默认值)</li>
+</ul>
+</li>
+</ul>
+<h3 id="视图"><a href="#视图" class="headerlink" title="视图"></a>视图</h3><ul>
+<li>创建视图：create view（可以加括号写属性名也可以不写）view_name as select……<ul>
+<li>物化视图:会存储的视图</li>
+<li>行列子集视图:一个视图是从单个基本表导出的，并且只是去掉了基本表的某些行和某些列，但保留了主码</li>
+<li>可以在视图上修改的条件</li>
+<li>创建视图的时候可以添加 with check option 则插入的时候必须满足创建视图的where语句</li>
+</ul>
+</li>
+<li>删除视图：drop view view_name （cascade&#x2F;restrict</li>
+<li>视图的作用： 更安全 逻辑更清晰</li>
+</ul>
+<h3 id="完整性约束"><a href="#完整性约束" class="headerlink" title="完整性约束"></a>完整性约束</h3><ul>
+<li><p>一种分类：实体完整性（主码），参照<del>（外码），用户定义</del></p>
+</li>
+<li><p>单个关系上的约束</p>
+<ul>
+<li>not null unique check （）……</li>
+<li>check：计算结果为unknown也会接受 建表的时候可以给check constraint命名</li>
+</ul>
+</li>
+<li><p>参照完整性：主要是外码<br>写外码的方式：foreign key（aa）references table_b_name(attributes) 被引用关系的属性可以不指明，但是指出来的话就一定要是超码<br>可以描述违反约束时的操作： 缺省 no action<br>例子:  on delete cascade&#x2F;set null&#x2F;set default<br>   on update cascade</p>
+</li>
+<li><p>删除约束： alter table …… drop constraint cons_name</p>
+</li>
+<li><p>断言<br>create assertion a_name check xxx;</p>
+</li>
+<li><p>数据设置缺省值<br>建表的时候声明default default_value</p>
+</li>
+<li><p>在建表的时候声明约束名：<br>CREATE TABLE Student<br>(   Sno  NUMERIC(6)<br>    CONSTRAINT C1 CHECK (Sno BETWEEN 90000 AND 99999),<br>    Sname  CHAR(20)<br>    CONSTRAINT C2 NOT NULL,<br>    Sage  NUMERIC(3)<br>    CONSTRAINT C3 CHECK (Sage &lt; 30),<br>    Ssex  CHAR(2)<br>    CONSTRAINT C4 CHECK (Ssex IN ( ‘男’,’女’)),<br>    CONSTRAINT StudentKey PRIMARY KEY(Sno)<br>  );</p>
+</li>
+</ul>
+<h3 id="授权与收回"><a href="#授权与收回" class="headerlink" title="授权与收回"></a>授权与收回</h3><ul>
+<li><p>授权 grant (权限) on (表或者视图) to (用户列表)</p>
+<ul>
+<li>可以授的权：select insert update delete  all previleges select,update和insert可以指定属性（不用授整个表的权）?</li>
+<li>with grant option：可以传递权限</li>
+</ul>
+</li>
+<li><p>收回权限 revoke (权限) on（表or视图名）from (用户) (cascade&#x2F;restrict)</p>
+<ul>
+<li>收回授权选项：revoke grant option!! for （权限名） on …… from ……</li>
+<li>注意对视图的授权 对视图的操作会转化成对基本表的操作，因此用户需要基本表上的权限</li>
+</ul>
+</li>
+<li><p>角色：避免权限被级联收回<br>create role r_name<br>可以向角色授予权限，可以把角色授予给用户：grant role_name to user_name<br>用用户角色授权：添加granted by current role语句</p>
+</li>
+</ul>
+<h2 id="6-元组关系演算和域关系演算"><a href="#6-元组关系演算和域关系演算" class="headerlink" title="6 元组关系演算和域关系演算"></a>6 元组关系演算和域关系演算</h2><p>注意只选择某些属性的表达</p>
+<h2 id="7-E-R模型"><a href="#7-E-R模型" class="headerlink" title="7 E-R模型"></a>7 E-R模型</h2><p>呜呜啊啊呃呃学不完了</p>
+<ul>
+<li><p>概念：实体和联系</p>
+</li>
+<li><p>参与联系集的实体集的数目称为联系集的度</p>
+</li>
+</ul>
+<p>（待补）</p>
+<h2 id="8-关系数据库设计"><a href="#8-关系数据库设计" class="headerlink" title="8 关系数据库设计"></a>8 关系数据库设计</h2><ul>
+<li><p>评价关系模式设计好坏</p>
+<ul>
+<li>冗余</li>
+<li>是否会出现异常：更新异常、插入异常、删除异常（统称存储异常）</li>
+</ul>
+</li>
+<li><p>解决方法： 分解</p>
+<ul>
+<li>分解的定义和分类 有损分解，无损分解检查</li>
+</ul>
+</li>
+<li><p>分解的方式</p>
+<ul>
+<li>分解的模型：范式</li>
+<li>分解的标准：数据依赖</li>
+<li>定义</li>
+<li>数据依赖分类：函数&amp;多值</li>
+</ul>
+</li>
+<li><p>函数依赖 FD</p>
+<ul>
+<li><p>定义：对某个数据库实例&#x2F;模式中的任意元组t1，t2，α，β是属性组。若t1[α]&#x3D;t2[α]→t1[β]&#x3D;t2[β]，称满足函数依赖α→β</p>
+</li>
+<li><p>ppt：函数依赖应该定义在关系模式上</p>
+</li>
+<li><p>从函数依赖的角度审视码，外码，无损分解</p>
+</li>
+<li><p>衍生定义</p>
+<ul>
+<li>完全&#x2F;部分函数依赖 完全：α的任意真子集γ不存在γ→β的函数依赖 部分相反</li>
+<li>平凡&#x2F;非平凡~  β为&#x2F;不为α子集</li>
+<li>传递函数依赖<br>X,Y,Z是关系R中互不相同的属性集合，存在X→Y(Y !→X),Y→Z，(Z不属于X并Y)，则称Z传递函数依赖于X</li>
+<li>逻辑蕴涵<br>对于满足一组函数依赖F的关系模式R &lt;U, F&gt;，其任何一个关系r，若函数依赖X→Y都成立（即r中任意两元组t、s，若t[X]&#x3D;s[X]，则 t[Y]&#x3D;s[Y]），则称F逻辑蕴涵X →Y</li>
+<li>F+:F的闭包（F逻辑蕴含的所有依赖），F为函数依赖集合</li>
+<li>保持依赖 定义见笔记 笔记没了!aaaa<ul>
+<li>两种验证算法</li>
+<li>第一种：先算F+ 然后得到F’ 计算F’+ 比较</li>
+<li>第二种：对每个属性（还是依赖？），与分解后的每个模式求交，计算F下的闭包，再和当前模式求交 得到的结果之并是属性在F’+下闭包<br>&#x2F;&#x2F;懂了懂了</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>函数依赖的理论</p>
+<ul>
+<li>阿姆斯特朗公理：自反律(α’是α子集) α→α’、增补律α→β γ属性集，γα→γβ、传递律α→β β→γ</li>
+<li>推导的定理 合并律？分解律 伪传递律</li>
+<li>用函数依赖的定义证明阿姆斯特朗公理 或者用公理证明推导定理</li>
+<li>引理1  X→A1 A2…Ak成立的充分必要条件是X→Ai成立（i&#x3D;1，2，…，k） 不知道什么用的引理</li>
+<li>证明定理的有效性（定义） 完备性（反证？）</li>
+</ul>
+</li>
+<li><p>算法：</p>
+<ul>
+<li><p>闭包计算<br>对F中每个依赖，先用自反律求出所有依赖 加入F+<br>然后应用增补律求出依赖<br>最后对任意不同的依赖f1，f2 如果可以应用传递律 把结果加入F+</p>
+</li>
+<li><p>属性闭包计算</p>
+<ul>
+<li>属性（集）a a+是被a决定的属性集合（与函数依赖集相关）</li>
+<li>引理2  设F为属性集U上的一组函数依赖，X、Y 属于U，X→Y能由F根据Armstrong公理导出的充分必要条件是Y属于X+（算法证明？）</li>
+<li>求出每个属性的闭包，则求出F+</li>
+<li>算法 首先令属性集闭包等于闭包本身，然后对每个函数依赖，如果左侧属性组在闭包里，加入右侧属性组，一直到闭包不变<br> 正确性证明：(有效性)每个加入的属性组都在a+里面，(完备性)每个a+里的属性一定可以添加进去（通过传递或者直接添加）<br> 用处是可以拿来看a是不是超码，或者求F+<br> 时间复杂度O（F^2）</li>
+<li>引理3 F+ &#x3D; G+ 的充分必要条件是F属于G+和G属于F+</li>
+</ul>
+</li>
+<li><p>函数依赖集的化简：去掉无关属性 无关属性判断（左，右）<br>函数依赖 α→β A属于α B属于β<br>左侧无关属性：从F可推出（F-（a→β）并（a-A→β））<br>F中计算a-A的闭包<br>右侧无关属性: 从（F-（a→β）并（a→β-B））可推出F<br>F’中计算a的闭包</p>
+</li>
+<li><p>两种覆盖定义：</p>
+<ul>
+<li>最小覆盖：<br>（1）F中任一函数依赖的右部仅含有一个属性。<br>（2）F中不存在这样的函数依赖X→A， 使得F与F-{X→A}等价。<br>&#x2F;&#x2F;即F中的函数依赖均不能由F中其他函数依赖导出<br>（3）F中不存在这样的函数依赖X→A， X有真子集Z使得F-{X→A}∪{Z→A}与F等价。<br>&#x2F;&#x2F;F中各函数依赖左部均为最小属性集（不存在冗余属性）</li>
+</ul>
+<p>注意（2）！！！</p>
+<ul>
+<li>定理  每一个函数依赖集F均等价于一个极小函数依赖集Fm。此Fm称为F的最小依赖集<br>构造最小覆盖：首先拆开多个的属性组（引理1）<br>然后去掉每个函数依赖，看是否可以推出（属性仍然在变换后的依赖集闭包里，等价）<br>最后检查左侧是否有冗余属性<br>done</li>
+<li>正则覆盖：<br>每个函数依赖没有冗余属性，且左侧属性组唯一</li>
+</ul>
+</li>
+<li><p>化简方式：计算正则覆盖，找到一个包含属性更少的基本函数依赖集合，且闭包相同<br>正则覆盖可以由最小覆盖得到（合并左边属性相同的依赖）<br>也可以直接算：先合并左边相同的依赖 然后去掉所有多余属性（不管左右）</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>分解算法<br>1.BCNF分解算法<br>检查每个模式属不属于BCNF<br>有一个模式Ri不属于BCNF：找到非平凡的函数依赖a→b a不是超码（算a+） 且a∩b&#x3D;空集 令分解&#x3D;(原来的分解-Ri)∪（Ri-b）∪（a，b）<br>直到做完<br>满足无损分解的充分条件</p>
+</li>
+<li><p>进一步的冗余：使用多值依赖解决</p>
+<ul>
+<li>多值依赖 MVD定义：<br>α →→ β</li>
+</ul>
+<ol>
+<li>t1[α]&#x3D;t2[α]<br>存在t3，t4<br>t1[α]&#x3D;t2[α]&#x3D;t3[α]&#x3D;t4[α]<br>t1[β]&#x3D;t3[β] t2[β]&#x3D;t4[β]<br>t1[R-β]&#x3D;t4[R-β]  t2[R-β]&#x3D;t3[R-β]<br>  不构成函数依赖，但是某个属性组只和另一个属性组有关联，和其余属性组无关</li>
+<li>设R(U)是一个关系模式，X, Y属于U，Z&#x3D;U-XY，关系模式R上的一个多值依赖是形如g:X→→Y的一个命题，它的含义是：对于R的任一可能的实例关系中的元组的每一个XZ-值xz，都有YU(xz)&#x3D;YU(x)，即对于每一个给定的 XZ-值，其Y-像集的值都仅仅依赖于XZ-值的X分量，而与Z分量毫无关系。称在R上X多值决定Y，或Y多值依赖于X。</li>
+<li>设R,X,Y, Z如上所述， R上的一个多值依赖是形如g:XY的一个命题，它的含义是：对于R的任一可能的实例关系r，如果存在元组t,sr，使得t[X]&#x3D;s[X]，则必定存在元组u属于r，使得u[X]&#x3D;t[X]&#x3D;s[X]，u[Y]&#x3D;t[Y]，而u[Z]&#x3D;s[Z]。</li>
+</ol>
+<ul>
+<li>多值依赖一些结论<br>引理：设R(U)是一个关系模式<br>Y’&#x3D;Y-X，则X→→Y当且仅当X→→Y’；<br>如果Y属于X属于U，则X→→Y成立；<br>如果U&#x3D;XY ，则X→→Y成立<br>多值依赖满足类似的阿姆斯特朗公理</li>
+</ul>
+</li>
+<li><p>需要掌握的算法</p>
+<ul>
+<li>闭包计算（用属性闭包算）</li>
+<li>函数依赖怎么列举？好问题</li>
+<li>正则覆盖计算</li>
+<li>BCNF 分解 3NF 分解 过程和效率</li>
+</ul>
+</li>
+<li><p>证明：3NF的两个定义etc</p>
+</li>
+<li><p>1NF-4NF<br>1NF：每个分量是不可分开的数据项,R的所有属性都是原子的<br>2NF：非主属性完全依赖于一个候选码（或者：没有部分依赖于一个候选码）<br>不属于2NF：会产生插入异常，删除异常，数据冗余修改复杂<br>3NF：1.没有非主属性A传递依赖于R的一个码<br> 2.所有的函数依赖α→β：要么平凡，要么α是超码 要么β-α中每个属性都在一个候选码里（可以不一样！）<br>BNCF：1.没有任何属性传递依赖于一个码<br>  2.设F是关系模式R上的FD集，如果对于任一属性集YR和任一属性A属于R-Y，只要Y→A成立，Y必定是R的某个超码（非平凡的函数依赖α是超码）<br>4NF：每一个多值依赖a→→b 要么是平凡的，要么a是个超码</p>
+</li>
+</ul>
+<h2 id="10-13"><a href="#10-13" class="headerlink" title="10-13"></a>10-13</h2><p>索引</p>
+<ul>
+<li><p>顺序索引</p>
+<ul>
+<li><p>主索引&#x2F;聚集索引 按索引顺序存储文件</p>
+</li>
+<li><p>辅助索引 搜索码顺序和文件顺序不同</p>
+</li>
+<li><p>稠密索引 每个搜索码都有索引项</p>
+</li>
+<li><p>稀疏索引 只为某些搜索码建立索引项 一定是聚集索引</p>
+</li>
+<li><p>辅助索引一定是稠密索引</p>
+</li>
+<li><p>删除索引</p>
+<ul>
+<li>稠密索引<ul>
+<li>如果搜索码只对应一项，删掉索引项</li>
+<li>否则用数组或链表删除元素的方式从索引项里删掉指向删除记录的指针</li>
+</ul>
+</li>
+<li>稀疏索引<ul>
+<li>没有索引项指向删除的记录→不用管</li>
+<li>删除记录是唯一一个有这个搜索码的项→ 下一条记录没有索引项的时候用下一条记录的搜索码替换，否则删掉</li>
+<li>不是唯一的→用下一条记录的指针去替换当前指针</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>插入索引</p>
+<ul>
+<li>稠密索引<ul>
+<li>建新的索引项，或者数组&#x2F;链表插入</li>
+</ul>
+</li>
+<li>稀疏索引<br>假设索引为每个块保存一个索引项。如果建立新块，将新块中第一个搜索码值插入到索引中，否则不动</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>查询优化</p>
+<ul>
+<li>有选择和连接操作时，先做选择操作，这样参加连接的元组就可以大大减少，这是代数优化</li>
+<li>采用索引查询代价小。 物理优化</li>
+</ul>
+</li>
+</ul>
+<h2 id="14-辅助技术xml"><a href="#14-辅助技术xml" class="headerlink" title="14 辅助技术xml"></a>14 辅助技术xml</h2><ul>
+<li><p>DTD 语法</p>
+<ul>
+<li>例子</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">University DTD with ID and IDREF attribute types.</span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="keyword">university-3</span> [</span></span><br><span class="line"><span class="meta">    <span class="meta">&lt;!ELEMENT <span class="keyword">university</span> ( (<span class="keyword">department</span>|<span class="keyword">course</span>|<span class="keyword">instructor</span>)+)&gt;</span></span></span><br><span class="line"><span class="meta">    <span class="meta">&lt;!ELEMENT <span class="keyword">department</span> ( <span class="keyword">building</span>, <span class="keyword">budget</span> )&gt;</span></span></span><br><span class="line"><span class="meta">     <span class="meta">&lt;!ATTLIST <span class="keyword">department</span></span></span></span><br><span class="line"><span class="meta"><span class="meta">     <span class="keyword">ept_name</span> <span class="keyword">ID</span> <span class="keyword">#REQUIRED</span> &gt;</span></span></span><br><span class="line"><span class="meta">     <span class="meta">&lt;!ELEMENT <span class="keyword">course</span> (<span class="keyword">title</span>, <span class="keyword">credits</span> )&gt;</span></span></span><br><span class="line"><span class="meta">     <span class="meta">&lt;!ATTLIST <span class="keyword">course</span></span></span></span><br><span class="line"><span class="meta"><span class="meta">     <span class="keyword">course_id</span> <span class="keyword">ID</span> <span class="keyword">#REQUIRED</span></span></span></span><br><span class="line"><span class="meta"><span class="meta">    <span class="keyword">dept_name</span> <span class="keyword">IDREF</span> <span class="keyword">#REQUIRED</span></span></span></span><br><span class="line"><span class="meta"><span class="meta">    <span class="keyword">instructors</span> <span class="keyword">IDREFS</span> <span class="keyword">#IMPLIED</span> &gt;</span></span></span><br><span class="line"><span class="meta">    <span class="meta">&lt;!ELEMENT <span class="keyword">instructor</span> ( <span class="keyword">name</span>, <span class="keyword">salary</span> )&gt;</span></span></span><br><span class="line"><span class="meta">    <span class="meta">&lt;!ATTLIST <span class="keyword">instructor</span></span></span></span><br><span class="line"><span class="meta"><span class="meta">    <span class="keyword">IID</span> <span class="keyword">ID</span> <span class="keyword">#REQUIRED</span> </span></span></span><br><span class="line"><span class="meta"><span class="meta">    <span class="keyword">dept_name</span> <span class="keyword">IDREF</span> <span class="keyword">#REQUIRED</span> &gt;</span></span></span><br><span class="line"><span class="meta">    · · · declarations for title, credits, building,budget, name and salary · · ·]&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>嵌套结构<br>子元素写法：</li>
+</ul>
+<p>&lt;! ELEMENT 元素名（子元素列表和约束）&gt;<br>子元素列表：#PCDATA　子元素的名字　子元素的名字＋正则表达式<br>&lt;! ELEMENT department (dept_name  building, budget)&gt;<br><!ELEMENT university ( (department|course|instructor)+)><br>&lt;! ELEMENT dept_name (#PCDATA)&gt;<br>&lt;! ELEMENT budget (#PCDATA)&gt;<br>属性写法<!ATTLIST　元素名 属性名1 类型1 约束1
+属性名2 类型2 约束2
+···><br>类型：CDATA ID IDREF IDREFS<br>CDATA（包含字符数据）<br>ID (identifier，该元素的唯一标识符) or IDREF (ID reference，对另一元素的引用，这个属性必须包含在文档中某个元素的ID属性) or IDREFS (multiple IDREFs 空格分开的引用列表)</p>
+<p>约束：#REQUIRED #IMPLIED 默认值</p>
+<p>注意子元素有顺序！！属性没有<br>总结一下：</p>
+<ol>
+<li>开头<!DOCTYPE （数据库）模式名[这里面写子元素]></li>
+<li>首先嵌一个数据库模式的元素 <!ELEMENT university ( (department|course|instructor)+)> 子元素为关系模式名</li>
+<li>关系模式： <!ELEMENT 模式名 (子元素（关系模式列）列表)> 括号里的不能是主码外码ETC</li>
+<li>一致性约束 ： 用属性列表实现<!ELEMENT department ( building, budget )>
+<!ATTLIST department dept_name ID #REQUIRED ></li>
+</ol>
+</li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="http://example.com">John Doe</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://example.com/2023/07/20/database/">http://example.com/2023/07/20/database/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/07/20/coa/" title="计组复习笔记"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next Post</div><div class="next_info">计组复习笔记</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">John Doe</div><div class="author-info__description"></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">0</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">0</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Catalog</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#1-%E7%BB%AA%E8%AE%BA"><span class="toc-number">1.</span> <span class="toc-text">1 绪论</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-1-1-2-%E5%BC%80%E5%A7%8B"><span class="toc-number">1.1.</span> <span class="toc-text">1.1-1.2 开始</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#1-3%E6%95%B0%E6%8D%AE%E6%8A%BD%E8%B1%A1"><span class="toc-number">1.2.</span> <span class="toc-text">1.3数据抽象</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#2-%E5%85%B3%E7%B3%BB%E6%A8%A1%E5%9E%8B%E4%BB%8B%E7%BB%8D-%E5%85%B3%E7%B3%BB%E4%BB%A3%E6%95%B0%E6%9F%A5%E8%AF%A2"><span class="toc-number">2.</span> <span class="toc-text">2 关系模型介绍  关系代数查询</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9B%B4%E5%A4%9A%E7%9A%84%E6%A6%82%E5%BF%B5"><span class="toc-number">2.1.</span> <span class="toc-text">更多的概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%B3%E7%B3%BB%E4%BB%A3%E6%95%B0"><span class="toc-number">2.2.</span> <span class="toc-text">关系代数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#3-SQL"><span class="toc-number">3.</span> <span class="toc-text">3 SQL</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#4-%E4%B8%AD%E7%BA%A7sql"><span class="toc-number">4.</span> <span class="toc-text">4 中级sql</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%BF%9E%E6%8E%A5"><span class="toc-number">4.1.</span> <span class="toc-text">连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%86%E5%9B%BE"><span class="toc-number">4.2.</span> <span class="toc-text">视图</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%8C%E6%95%B4%E6%80%A7%E7%BA%A6%E6%9D%9F"><span class="toc-number">4.3.</span> <span class="toc-text">完整性约束</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8E%88%E6%9D%83%E4%B8%8E%E6%94%B6%E5%9B%9E"><span class="toc-number">4.4.</span> <span class="toc-text">授权与收回</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#6-%E5%85%83%E7%BB%84%E5%85%B3%E7%B3%BB%E6%BC%94%E7%AE%97%E5%92%8C%E5%9F%9F%E5%85%B3%E7%B3%BB%E6%BC%94%E7%AE%97"><span class="toc-number">5.</span> <span class="toc-text">6 元组关系演算和域关系演算</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#7-E-R%E6%A8%A1%E5%9E%8B"><span class="toc-number">6.</span> <span class="toc-text">7 E-R模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#8-%E5%85%B3%E7%B3%BB%E6%95%B0%E6%8D%AE%E5%BA%93%E8%AE%BE%E8%AE%A1"><span class="toc-number">7.</span> <span class="toc-text">8 关系数据库设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#10-13"><span class="toc-number">8.</span> <span class="toc-text">10-13</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-%E8%BE%85%E5%8A%A9%E6%8A%80%E6%9C%AFxml"><span class="toc-number">9.</span> <span class="toc-text">14 辅助技术xml</span></a></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/07/20/database/" title="数据库笔记">数据库笔记</a><time datetime="2023-07-20T07:02:41.868Z" title="Created 2023-07-20 15:02:41">2023-07-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/07/20/coa/" title="计组复习笔记">计组复习笔记</a><time datetime="2023-07-20T06:47:57.050Z" title="Created 2023-07-20 14:47:57">2023-07-20</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/07/20/hello-world/" title="Hello World">Hello World</a><time datetime="2023-07-20T04:27:26.400Z" title="Created 2023-07-20 12:27:26">2023-07-20</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By John Doe</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Switch Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between single-column and double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside_config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div></body></html>
